@@ -214,6 +214,7 @@ int main (void)
 			count = 0;
 
 			pisca_led(5, t);
+			but2_flag = 0;
 			led_flag = 0;
 			but_flag = 0;	
 
@@ -226,6 +227,7 @@ int main (void)
 		if (but_flag1){
 			delay_ms(100);
 			count ++;
+			
 		}
 
 		if (but3_flag){
