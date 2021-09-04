@@ -27,6 +27,12 @@
 #define BUT2_IDX  31
 #define BUT2_IDX_MASK (1 << BUT2_IDX)
 
+// Botão 3
+#define BUT3_PIO      PIOA
+#define BUT3_PIO_ID   ID_PIOA
+#define BUT3_IDX  19
+#define BUT3_IDX_MASK (1 << BUT3_IDX)
+
 /************************************************************************/
 /*  Interrupt Edge detection is active. */
 #define PIO_IT_EDGE             (1u << 6)
@@ -41,6 +47,7 @@ volatile char but_flag;
 volatile char but_flag1;
 volatile char but2_flag;
 volatile char led_flag;
+volatile char but3_flag;
 /************************************************************************/
 
 void io_init(void);
@@ -62,6 +69,12 @@ void but2_callback(void)
 	if(led_flag){
 		but2_flag = 1;
 	}
+}
+
+
+void but3_callback(void)
+{
+	but3_flag = 1;
 }
 
 /************************************************************************/
@@ -96,6 +109,7 @@ void io_init(void)
 	// Inicializa clock do periférico PIO responsavel pelo botao
 	pmc_enable_periph_clk(BUT_PIO_ID);
 	pmc_enable_periph_clk(BUT2_PIO_ID);
+	pmc_enable_periph_clk(BUT3_PIO_ID);
 
 
   	// Configura PIO para lidar com o pino do botão como entrada
@@ -106,10 +120,14 @@ void io_init(void)
 	pio_configure(BUT2_PIO, PIO_INPUT, BUT2_IDX_MASK, PIO_PULLUP | PIO_DEBOUNCE);    
   	pio_set_debounce_filter(BUT2_PIO, BUT2_IDX_MASK, 60);
 
+	pio_configure(BUT3_PIO, PIO_INPUT, BUT3_IDX_MASK, PIO_PULLUP | PIO_DEBOUNCE);    
+  	pio_set_debounce_filter(BUT3_PIO, BUT3_IDX_MASK, 60);
+
 	  
 	// Ativa interrupção
 	pio_enable_interrupt(BUT_PIO, BUT_IDX_MASK);
 	pio_enable_interrupt(BUT2_PIO, BUT2_IDX_MASK);
+	pio_enable_interrupt(BUT3_PIO, BUT3_IDX_MASK);
 
 
 
@@ -128,6 +146,12 @@ void io_init(void)
 					BUT2_IDX_MASK,
 					PIO_IT_RISE_EDGE,
 					but2_callback);
+	
+	pio_handler_set(BUT3_PIO,
+				BUT3_PIO_ID,
+				BUT3_IDX_MASK,
+				PIO_IT_RISE_EDGE,
+				but3_callback);
 
 	// Configura NVIC para receber interrupcoes do PIO do botao
 	// com prioridade 4 (quanto mais próximo de 0 maior)
@@ -136,6 +160,9 @@ void io_init(void)
 
 	NVIC_EnableIRQ(BUT2_PIO_ID);
 	NVIC_SetPriority(BUT2_PIO_ID, 4); // Prioridade 4
+
+	NVIC_EnableIRQ(BUT3_PIO_ID);
+	NVIC_SetPriority(BUT3_PIO_ID, 4); // Prioridade 4
 
 }
 
@@ -199,6 +226,17 @@ int main (void)
 		if (but_flag1){
 			delay_ms(100);
 			count ++;
+		}
+
+		if (but3_flag){
+			t = t + 100;
+			freq = 1.0/(t*pow(10,-3));
+
+			sprintf(buffer, "f: %f", freq);
+			gfx_mono_draw_string(buffer, 0, 0, &sysfont);
+
+			but3_flag = 0;
+
 		}
 
 	}
