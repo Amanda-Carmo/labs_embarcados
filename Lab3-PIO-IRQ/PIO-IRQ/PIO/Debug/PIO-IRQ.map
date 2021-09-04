@@ -9956,7 +9956,7 @@ OUTPUT(PIO-IRQ.elf elf32-littlearm)
  .debug_ranges  0x00000680       0x20 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
  .debug_ranges  0x000006a0       0x50 src/main.o
 
-.debug_macro    0x00000000    0x1cdcb
+.debug_macro    0x00000000    0x1cdd1
  .debug_macro   0x00000000      0x6d1 src/ASF/common/services/clock/same70/sysclk.o
  .debug_macro   0x000006d1      0x8d4 src/ASF/common/services/clock/same70/sysclk.o
  .debug_macro   0x00000fa5      0x652 src/ASF/common/services/clock/same70/sysclk.o
@@ -10116,17 +10116,17 @@ OUTPUT(PIO-IRQ.elf elf32-littlearm)
  .debug_macro   0x0001b741      0x664 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_macro   0x0001bda5       0x10 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_macro   0x0001bdb5      0x455 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_macro   0x0001c20a      0x898 src/main.o
- .debug_macro   0x0001caa2       0x28 src/main.o
- .debug_macro   0x0001caca       0x23 src/main.o
- .debug_macro   0x0001caed       0x16 src/main.o
- .debug_macro   0x0001cb03       0x40 src/main.o
- .debug_macro   0x0001cb43       0x88 src/main.o
- .debug_macro   0x0001cbcb      0x1ce src/main.o
- .debug_macro   0x0001cd99       0x16 src/main.o
- .debug_macro   0x0001cdaf       0x1c src/main.o
+ .debug_macro   0x0001c20a      0x89e src/main.o
+ .debug_macro   0x0001caa8       0x28 src/main.o
+ .debug_macro   0x0001cad0       0x23 src/main.o
+ .debug_macro   0x0001caf3       0x16 src/main.o
+ .debug_macro   0x0001cb09       0x40 src/main.o
+ .debug_macro   0x0001cb49       0x88 src/main.o
+ .debug_macro   0x0001cbd1      0x1ce src/main.o
+ .debug_macro   0x0001cd9f       0x16 src/main.o
+ .debug_macro   0x0001cdb5       0x1c src/main.o
 
-.debug_line     0x00000000     0x8b05
+.debug_line     0x00000000     0x8b07
  .debug_line    0x00000000      0xc67 src/ASF/common/services/clock/same70/sysclk.o
  .debug_line    0x00000c67      0x9ed src/ASF/common/services/delay/sam/cycle_counter.o
  .debug_line    0x00001654      0xa09 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
@@ -10137,7 +10137,7 @@ OUTPUT(PIO-IRQ.elf elf32-littlearm)
  .debug_line    0x00005b5e      0xb58 src/ASF/sam/drivers/pmc/sleep.o
  .debug_line    0x000066b6      0xac0 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_line    0x00007176      0x819 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_line    0x0000798f     0x1176 src/main.o
+ .debug_line    0x0000798f     0x1178 src/main.o
 
 .debug_str      0x00000000    0x8bacf
  .debug_str     0x00000000    0x85842 src/ASF/common/services/clock/same70/sysclk.o

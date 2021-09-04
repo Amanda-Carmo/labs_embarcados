@@ -38,6 +38,9 @@
 #define BUT_IDX  11
 #define BUT_IDX_MASK (1 << BUT_IDX)
 
+/*  Interrupt Edge detection is active. */
+#define PIO_IT_EDGE             (1u << 6)
+
 /************************************************************************/
 /* constants                                                            */
 /************************************************************************/
@@ -108,7 +111,7 @@ void io_init(void)
   pio_handler_set(BUT_PIO,
                   BUT_PIO_ID,
                   BUT_IDX_MASK,
-                  PIO_IT_RISE_EDGE,
+                  PIO_IT_EDGE,
                   but_callback);
 
   // Ativa interrupção

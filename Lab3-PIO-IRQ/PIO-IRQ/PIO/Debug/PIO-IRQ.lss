@@ -29,13 +29,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_ranges 000006f0  00000000  00000000  000357f0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0001cdcb  00000000  00000000  00035ee0  2**0
+ 13 .debug_macro  0001cdd1  00000000  00000000  00035ee0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_line   00008b05  00000000  00000000  00052cab  2**0
+ 14 .debug_line   00008b07  00000000  00000000  00052cb1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    0008bacf  00000000  00000000  0005b7b0  2**0
+ 15 .debug_str    0008bacf  00000000  00000000  0005b7b8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_frame  00002158  00000000  00000000  000e7280  2**2
+ 16 .debug_frame  00002158  00000000  00000000  000e7288  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -4356,14 +4356,14 @@ void io_init(void)
   pio_handler_set(BUT_PIO,
   401a66:	4b11      	ldr	r3, [pc, #68]	; (401aac <io_init+0x84>)
   401a68:	9300      	str	r3, [sp, #0]
-  401a6a:	2370      	movs	r3, #112	; 0x70
+  401a6a:	2340      	movs	r3, #64	; 0x40
   401a6c:	f44f 6200 	mov.w	r2, #2048	; 0x800
   401a70:	210a      	movs	r1, #10
   401a72:	480c      	ldr	r0, [pc, #48]	; (401aa4 <io_init+0x7c>)
   401a74:	4c0e      	ldr	r4, [pc, #56]	; (401ab0 <io_init+0x88>)
   401a76:	47a0      	blx	r4
                   BUT_IDX_MASK,
-                  PIO_IT_RISE_EDGE,
+                  PIO_IT_EDGE,
                   but_callback);
 
   // Ativa interrupção
@@ -4444,7 +4444,8 @@ void main(void)
   401ae6:	4b06      	ldr	r3, [pc, #24]	; (401b00 <main+0x40>)
   401ae8:	2200      	movs	r2, #0
   401aea:	701a      	strb	r2, [r3, #0]
-      // Entra em sleep mode    
+	  
+     // Entra em sleep mode    
      // Código 'trava' aqui até ser 'acordado' 
      pmc_sleep(SAM_PM_SMODE_SLEEP_WFI);     
   401aec:	2002      	movs	r0, #2
