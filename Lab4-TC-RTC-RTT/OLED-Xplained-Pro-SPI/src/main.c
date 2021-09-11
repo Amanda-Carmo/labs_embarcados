@@ -71,6 +71,7 @@ volatile Bool f_rtt = false;
 volatile char flag_rtc = 0;
 volatile char but1_flag;
 volatile char flag_sec = 0;
+volatile char flag_tc3 = 0;
 
 /************************************************************************/
 /* PROTOTYPES                                                           */
@@ -118,19 +119,34 @@ void TC1_Handler(void){
 	flag_tc = 1;
 }
 
-void TC0_Handler(void){
+void TC3_Handler(void){
 	volatile uint32_t ul_dummy;
 
 	/****************************************************************
 	* Devemos indicar ao TC que a interrupção foi satisfeita.
 	******************************************************************/
-	ul_dummy = tc_get_status(TC0, 0);
+	ul_dummy = tc_get_status(TC1, 0);
 
 	/* Avoid compiler warning */
 	UNUSED(ul_dummy);
 
 	/** Muda o estado do LED */
 	flag_placa = 1;
+}
+
+void TC6_Handler(void){
+	volatile uint32_t ul_dummy;
+
+	/****************************************************************
+	* Devemos indicar ao TC que a interrupção foi satisfeita.
+	******************************************************************/
+	ul_dummy = tc_get_status(TC2, 0);
+
+	/* Avoid compiler warning */
+	UNUSED(ul_dummy);
+
+	/** Muda o estado do LED */
+	flag_tc3 = 1;
 }
 
 void RTT_Handler(void)
@@ -363,7 +379,8 @@ int main (void)
 
 	/** Configura timer TC0, canal 1 */
 	TC_init(TC0, ID_TC1, 1, 4);
-	TC_init(TC0, ID_TC0, 0, 5);
+	TC_init(TC1, ID_TC3, 0, 5);
+	TC_init(TC2, ID_TC6, 0, 5);
 	
 	// Inicializa RTT com IRQ no alarme.
 	f_rtt = true;
@@ -382,12 +399,13 @@ int main (void)
 			rtc_get_time(RTC,&h,&m,&s);
 			/* configura alarme do RTC */
 			rtc_set_date_alarm(RTC, 1, rtc_initial.month, 1, rtc_initial.day);
-			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 20);
+			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 4);
 			but1_flag=0;
 		}
 		if(flag_rtc){
-			pisca_led3(5, 200);
+			pisca_led3(1, 50);
 			flag_rtc = 0;
+			flag_tc3 = 0;
 		}
 		
 		if (f_rtt){
@@ -416,7 +434,7 @@ int main (void)
 			sprintf(buffer, "%d : %d : %d", h, m, s);		
 			gfx_mono_draw_string(buffer, 0, 0, &sysfont);
 			flag_sec= 0;
-			
+						
 		}	
 		
 		pmc_sleep(SAM_PM_SMODE_SLEEP_WFI);
