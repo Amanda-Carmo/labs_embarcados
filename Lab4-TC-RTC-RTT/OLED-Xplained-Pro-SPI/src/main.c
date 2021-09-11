@@ -382,7 +382,7 @@ int main (void)
 			rtc_get_time(RTC,&h,&m,&s);
 			/* configura alarme do RTC */
 			rtc_set_date_alarm(RTC, 1, rtc_initial.month, 1, rtc_initial.day);
-			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 4);
+			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 20);
 			but1_flag=0;
 		}
 		if(flag_rtc){
