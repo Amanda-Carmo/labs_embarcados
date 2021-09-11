@@ -70,6 +70,7 @@ volatile char flag_placa = 0;
 volatile Bool f_rtt = false;
 volatile char flag_rtc = 0;
 volatile char but1_flag;
+volatile char flag_sec = 0;
 
 /************************************************************************/
 /* PROTOTYPES                                                           */
@@ -161,6 +162,9 @@ void RTC_Handler(void)
 
 	/* seccond tick	*/
 	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
+		//rtc_clear_status(RTC, RTC_SCCR_SECCLR);
+		flag_sec = 1; 
+		rtc_clear_status(RTC, RTC_SCCR_SECCLR);
 		
 	}
 	
@@ -371,8 +375,9 @@ int main (void)
 	
 	/** Configura RTC */
 	calendar rtc_initial = {2021, 3, 17, 12, 15, 45 ,1};
-	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN);
+	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN | RTC_IER_SECEN);
   
+	char buffer [50];
 	while (1) {
 		if(but1_flag){
 			rtc_get_time(RTC,&h,&m,&s);
@@ -406,6 +411,13 @@ int main (void)
 			flag_placa = 0;
 		}	
 		
+		if (flag_sec){
+			rtc_get_time(RTC,&h,&m,&s);
+
+			sprintf(buffer, "%d : %d : %d", h, m, s);		
+			gfx_mono_draw_string(buffer, 0, 0, &sysfont);
+			
+		}	
 		
 		pmc_sleep(SAM_PM_SMODE_SLEEP_WFI);
 	}
