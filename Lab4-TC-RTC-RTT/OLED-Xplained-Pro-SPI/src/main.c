@@ -391,10 +391,20 @@ int main (void)
 	
 	/** Configura RTC */
 	calendar rtc_initial = {2021, 9, 36, 10, 10, 45 ,1};
-	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN);
+	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN | RTC_IER_SECEN);
   
 	char buffer [50];
 	while (1) {
+		
+		if (flag_sec){
+			rtc_get_time(RTC,&h,&m,&s);
+
+			sprintf(buffer, "%lu : %lu : %lu", h, m, s);
+			gfx_mono_draw_string(buffer, 0, 0, &sysfont);
+			flag_sec= 0;
+			
+		}
+		
 		if(but1_flag){
 			rtc_get_time(RTC,&h,&m,&s);
 			/* configura alarme do RTC */
@@ -428,14 +438,7 @@ int main (void)
 			flag_placa = 0;
 		}	
 		
-		if (flag_sec){
-			rtc_get_time(RTC,&h,&m,&s);
 
-			sprintf(buffer, "%d : %d : %d", h, m, s);		
-			gfx_mono_draw_string(buffer, 0, 0, &sysfont);
-			flag_sec= 0;
-						
-		}	
 		
 		pmc_sleep(SAM_PM_SMODE_SLEEP_WFI);
 	}
