@@ -130,8 +130,6 @@ void io_init(void)
 	pio_enable_interrupt(BUT3_PIO, BUT3_IDX_MASK);
 
 
-
-
 	// Configura interrupção no pino referente ao botao e associa
 	// função de callback caso uma interrupção for gerada
 	// a função de callback é a: but_callback()
