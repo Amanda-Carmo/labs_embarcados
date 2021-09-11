@@ -47,7 +47,7 @@
 #define BUT1_IDX_MASK (1 << BUT1_PIN)
 
 /*  Rising edge interrupt is active */
-// #define PIO_IT_RISE_EDGE        (PIO_IT_RE_OR_HL | PIO_IT_EDGE | PIO_IT_AIME)
+#define PIO_IT_RISE_EDGE        (PIO_IT_RE_OR_HL | PIO_IT_EDGE | PIO_IT_AIME)
 
 typedef struct  {
   uint32_t year;
@@ -164,7 +164,6 @@ void RTC_Handler(void)
 	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
 		//rtc_clear_status(RTC, RTC_SCCR_SECCLR);
 		flag_sec = 1; 
-		rtc_clear_status(RTC, RTC_SCCR_SECCLR);
 		
 	}
 	
@@ -374,8 +373,8 @@ int main (void)
 	pio_set(LED3_PIO, LED3_IDX_MASK);
 	
 	/** Configura RTC */
-	calendar rtc_initial = {2021, 3, 17, 12, 15, 45 ,1};
-	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN | RTC_IER_SECEN);
+	calendar rtc_initial = {2021, 9, 36, 10, 10, 45 ,1};
+	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN);
   
 	char buffer [50];
 	while (1) {
@@ -383,7 +382,7 @@ int main (void)
 			rtc_get_time(RTC,&h,&m,&s);
 			/* configura alarme do RTC */
 			rtc_set_date_alarm(RTC, 1, rtc_initial.month, 1, rtc_initial.day);
-			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 20);
+			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 4);
 			but1_flag=0;
 		}
 		if(flag_rtc){
@@ -416,6 +415,7 @@ int main (void)
 
 			sprintf(buffer, "%d : %d : %d", h, m, s);		
 			gfx_mono_draw_string(buffer, 0, 0, &sysfont);
+			flag_sec= 0;
 			
 		}	
 		
