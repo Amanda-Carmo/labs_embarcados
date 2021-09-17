@@ -390,7 +390,7 @@ int main (void)
 	pio_set(LED3_PIO, LED3_IDX_MASK);
 	
 	/** Configura RTC */
-	calendar rtc_initial = {2021, 9, 36, 10, 10, 45 ,1};
+	calendar rtc_initial = {2021, 9, 36, 10, 10, 45 , 11};
 	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN | RTC_IER_SECEN);
   
 	char buffer [50];

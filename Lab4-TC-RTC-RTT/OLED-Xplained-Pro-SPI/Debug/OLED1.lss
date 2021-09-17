@@ -5082,14 +5082,14 @@ int main (void)
   401d6e:	47a0      	blx	r4
 	
 	/** Configura RTC */
-	calendar rtc_initial = {2021, 9, 36, 10, 10, 45 ,1};
+	calendar rtc_initial = {2021, 9, 36, 10, 10, 45 , 11};
   401d70:	ac13      	add	r4, sp, #76	; 0x4c
   401d72:	4d6a      	ldr	r5, [pc, #424]	; (401f1c <main+0x1fc>)
   401d74:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
   401d76:	c40f      	stmia	r4!, {r0, r1, r2, r3}
   401d78:	e895 0007 	ldmia.w	r5, {r0, r1, r2}
   401d7c:	e884 0007 	stmia.w	r4, {r0, r1, r2}
-	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN |  RTC_IER_SECEN);
+	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN | RTC_IER_SECEN);
   401d80:	2306      	movs	r3, #6
   401d82:	9305      	str	r3, [sp, #20]
   401d84:	466c      	mov	r4, sp
@@ -5170,10 +5170,10 @@ int main (void)
   401e00:	4640      	mov	r0, r8
   401e02:	f8df a18c 	ldr.w	sl, [pc, #396]	; 401f90 <main+0x270>
   401e06:	47d0      	blx	sl
-			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 5);
+			rtc_set_time_alarm(RTC, 1, h, 1, m, 1, s + 20);
   401e08:	f8d9 2000 	ldr.w	r2, [r9]
   401e0c:	6833      	ldr	r3, [r6, #0]
-  401e0e:	3305      	adds	r3, #5
+  401e0e:	3314      	adds	r3, #20
   401e10:	9302      	str	r3, [sp, #8]
   401e12:	2101      	movs	r1, #1
   401e14:	9101      	str	r1, [sp, #4]
@@ -12616,7 +12616,7 @@ int main (void)
   4072c8:	0010 0010 0000 0000 0000 0000 0020 0010     ............ ...
   4072d8:	0010 0020 0010 0010 0020 0010 0010 0020     .. ..... ..... .
   4072e8:	0000 0000 07e5 0000 0009 0000 0024 0000     ............$...
-  4072f8:	000a 0000 000a 0000 002d 0000 0001 0000     ........-.......
+  4072f8:	000a 0000 000a 0000 002d 0000 000b 0000     ........-.......
   407308:	6c25 2075 203a 6c25 2075 203a 6c25 0075     %lu : %lu : %lu.
 
 00407318 <_global_impure_ptr>:
