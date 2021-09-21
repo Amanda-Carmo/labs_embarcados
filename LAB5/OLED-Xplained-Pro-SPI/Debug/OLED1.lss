@@ -31,11 +31,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  13 .debug_macro  00020fb4  00000000  00000000  000414d5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_line   0000e3f0  00000000  00000000  00062489  2**0
+ 14 .debug_line   0000e3ed  00000000  00000000  00062489  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    0008ff5a  00000000  00000000  00070879  2**0
+ 15 .debug_str    0008ff5a  00000000  00000000  00070876  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_frame  00001e98  00000000  00000000  001007d4  2**2
+ 16 .debug_frame  00001e98  00000000  00000000  001007d0  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -3182,8 +3182,7 @@ void io_init(void){
   4012b4:	e000e100 	.word	0xe000e100
 
 004012b8 <main>:
-//   NVIC_EnableIRQ(RTT_IRQn);
-//   rtt_enable_interrupt(RTT, RTT_MR_ALMIEN | RTT_MR_RTTINCIEN);
+
 }
 
 int main (void)
@@ -3206,8 +3205,7 @@ int main (void)
 	gfx_mono_ssd1306_init();
   4012ce:	4b1d      	ldr	r3, [pc, #116]	; (401344 <main+0x8c>)
   4012d0:	4798      	blx	r3
-	// Inicializa RTT com IRQ no alarme.
-	// f_rtt = true;
+	float buffer [100];
 
   /* Insert application code here, after the board has been initialized. */
 	while(1) {

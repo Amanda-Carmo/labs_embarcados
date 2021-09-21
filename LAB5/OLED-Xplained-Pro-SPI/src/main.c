@@ -55,26 +55,6 @@ void gera_pulso(){
 }
 
 
-// void RTT_Handler(void)
-// {
-//   uint32_t ul_status;
-
-//   /* Get RTT status - ACK */
-//   ul_status = rtt_get_status(RTT);
-
-//   /* IRQ due to Time has changed */
-//   if ((ul_status & RTT_SR_RTTINC) == RTT_SR_RTTINC) {
-//     // f_rtt = false;  
-// 	pin_toggle(ECHO_PIO, ECHO_IDX_MASK);  
-//     }
-
-//   /* IRQ due to Alarm */
-//   if ((ul_status & RTT_SR_ALMS) == RTT_SR_ALMS) {
-//     // pin_toggle(LED_PIO, LED_IDX_MASK);    // BLINK Led
-//     //   f_rtt = true;                  // flag RTT alarme
-//    }  
-// }
-
 void io_init(void){
 	// Initialize the board clock
 	sysclk_init();
@@ -120,18 +100,7 @@ static void RTT_init(uint16_t pllPreScale, uint32_t IrqNPulses)
   /* Configure RTT for a 1 second tick interrupt */
   rtt_sel_source(RTT, false);
   rtt_init(RTT, pllPreScale);
-  
-//   ul_previous_time = rtt_read_timer_value(RTT);
-//   while (ul_previous_time == rtt_read_timer_value(RTT));
-  
-//   rtt_write_alarm_time(RTT, IrqNPulses+ul_previous_time);
 
-//   /* Enable RTT interrupt */
-//   NVIC_DisableIRQ(RTT_IRQn);
-//   NVIC_ClearPendingIRQ(RTT_IRQn);
-//   NVIC_SetPriority(RTT_IRQn, 4);
-//   NVIC_EnableIRQ(RTT_IRQn);
-//   rtt_enable_interrupt(RTT, RTT_MR_ALMIEN | RTT_MR_RTTINCIEN);
 }
 
 int main (void)
@@ -144,11 +113,6 @@ int main (void)
   // Init OLED
 	gfx_mono_ssd1306_init();
 	float buffer [100];
-  
-  // Escreve na tela um circulo e um texto
-	// gfx_mono_draw_filled_circle(20, 16, 16, GFX_PIXEL_SET, GFX_WHOLE);
-	// Inicializa RTT com IRQ no alarme.
-	// f_rtt = true;
 
   /* Insert application code here, after the board has been initialized. */
 	while(1) {
