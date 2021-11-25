@@ -1,0 +1,113 @@
+QuestÃ£o 1a
+----------
+
+depois de new(3):   ? ? ?
+depois de push(5):  5 ? ?
+depois de push(1):  5 1 ?
+depois de push(4):  5 1 4
+depois de pop():    5 1 ?
+depois de push(2):  5 1 2
+depois de pop():    5 1 ?
+depois de push(3):  5 1 3
+depois de pop():    5 1 ?
+
+
+QuestÃ£o 1b
+----------
+
+depois de new(3):  ? ? ?
+depois de put(5):  5 ? ?
+depois de put(1):  5 1 ?
+depois de put(4):  5 1 4
+depois de get():   ? 1 4
+depois de put(2):  2 1 4
+depois de get():   2 ? 4
+depois de put(3):  2 3 4
+depois de get():   2 3 ?
+
+
+QuestÃ£o 3
+---------
+// Considere também um método minpop que 
+// remove e devolve o *menor* elemento da pilha.
+
+int stack_int_minpop(stack_int *s) {
+    s->size --;
+    int v = 100000;
+    int index = 0;
+    int i;
+    for(for i = 0; i < s->size; i++){
+        if(s->data[i] < s->data[i+1] && v > s->data[i]){
+            v = s->data[i];
+            index = i;
+        }                
+    }  
+    for (int j = index; j < s->size; j++) {
+        s->data[j] = s->data[j + 1];
+    }    
+    return v;
+}
+
+
+QuestÃ£o 4
+---------
+
+int stack_int_minpop(stack_int *s) {
+    /* Escreva seu cÃ³digo aqui. */
+}
+
+
+QuestÃ£o 5
+---------
+
+*Escreva a resposta aqui, no mesmo formato do handout da Aula 10.*
+
+Nota-se que a ordem importa, para se saber qual paciente deve ser priorizado, 
+dada limitação de recursos. A ordem precisa ser feita de acordo com a 
+severidade de cada paciente.
+
+
+Ademais, a operação deve ser tao rápida quanto possível, não importando o 
+gasto de memória do sistema.
+
+A tabela a ser considerada é a de tempo a prática, considerando um n grande, 
+já que são centenas de pacientes com covid, além de que o tempo é priorizado.
+
+Como as listas inicialmente estão ordenadas de acordo com os números de 
+identificação de acordo com a chegada ao hospital, que é relacionada a 
+severidade (quanto mais tempo internado, mais severo o caso), considera-se 
+que há uma ordem decrescente, já que os pacientes com estado mais severo são 
+os primeiros da lista e os últimos, com estado menos severo.
+
+Assim, de acordo com a tabela, o merge sort seria a melhor opção.
+Ele tem uma complexidade de memória consumida maior, mas como foi dito, o 
+consumo de memória não é algo a se relevar.
+
+Um outro ponto relevante é o fato de garantir estabilidade, apesar de não ter sido 
+cobrado.
+
+
+
+QuestÃ£o 6
+---------
+
+*Escreva a resposta aqui, no mesmo formato do handout da Aula 17.*
+
+A velocidade neste caso é importante, dado que haverá entrada e saída de forma
+frequente.
+
+Como não se quer desperdício de memória e o tamanho máximo é conhecido, é possível
+usar a tabela de recomendação de memória na prática.
+
+Sabe-se que a quantidade máxima de pedidos é muito alta, mas raramente chega-se
+perto dela. Assim, segundo a tabela a lista ligada seria a melhor opção.
+
+no entanto, também se tem o desejo de uma boa velocidade e segundo a tabela de
+recomendação de tempo na prática, a melhor opção seria vetor estático.
+
+O meio termo para este impasse seria o vetor dinâmico, em segundo lugar em ambas
+tabelas. Além disso, tem o lado positivo de ter segurança contra estouro.
+
+Talvez, caberia conversar com o cliente de modo a se discutir qual das duas opções
+poderia ser priorizada.
+
