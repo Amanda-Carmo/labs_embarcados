@@ -11,6 +11,7 @@
 LV_FONT_DECLARE(dseg70);
 LV_FONT_DECLARE(dseg35);
 LV_FONT_DECLARE(dseg28);
+LV_FONT_DECLARE(dseg47);
 
 // global
 static  lv_obj_t * labelBtn1;
@@ -38,8 +39,6 @@ typedef struct {
 	uint h;
 } rtcData;
 
-QueueHandle_t xQueueRTC;
-
 SemaphoreHandle_t xSemaphore;
 
 calendar rtc_initial = {2021, 11, 10, 45, 0, 0 ,0};
@@ -65,6 +64,9 @@ static lv_indev_drv_t indev_drv;
 
 #define TASK_LCD_STACK_SIZE                (1024*6/sizeof(portSTACK_TYPE))
 #define TASK_LCD_STACK_PRIORITY            (tskIDLE_PRIORITY)
+
+#define TASK_RTC_STACK_SIZE                (1024*6/sizeof(portSTACK_TYPE))
+#define TASK_RTC_STACK_PRIORITY            (tskIDLE_PRIORITY)
 
 extern void vApplicationStackOverflowHook(xTaskHandle *pxTask,  signed char *pcTaskName);
 extern void vApplicationIdleHook(void);
@@ -156,6 +158,8 @@ void RTC_Handler(void)
 	/* seccond tick	*/
 	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
 		//rtc_clear_status(RTC, RTC_SCCR_SECCLR);
+		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR(xSemaphore, &xHigherPriorityTaskWoken);
 	}
 	
 	/* Time or date alarm */
@@ -260,7 +264,7 @@ void lv_termostato(void) {
     lv_label_set_text_fmt(labelSetValue, "%02d", 22);
 
 
-	labelClock = lv_label_create(lv_scr_act(), NULL);
+	labelClock = lv_label_create(lv_scr_act());
     lv_obj_align(labelClock, LV_ALIGN_LEFT_MID, 220 , -95);
     lv_obj_set_style_text_font(labelClock, &dseg28, LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(labelClock, lv_color_white(), LV_STATE_DEFAULT);
@@ -284,7 +288,34 @@ static void task_lcd(void *pvParameters) {
 	vTaskDelay(50);	
 }
 
+static void task_rtc(void *pvParameters){
+	 /*
+   * We are using the semaphore for synchronisation so we create a binary
+   * semaphore rather than a mutex.  We must make sure that the interrupt
+   * does not attempt to use the semaphore before it is created!
+   */
+  xSemaphore = xSemaphoreCreateBinary();
+  const TickType_t xDelayLed = 10 / portTICK_PERIOD_MS;
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+  RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_SECEN);
 
+  if (xSemaphore == NULL)
+    printf("Falha em criar o semaforo \n");
+
+  for (;;) {
+    // aguarda sem�foro com timeout de  500 ms
+    if( xSemaphoreTake(xSemaphore, ( TickType_t ) 10 / portTICK_PERIOD_MS) == pdTRUE ){
+			rtc_get_time(RTC,&rtc_initial.hour,&rtc_initial.minute,&rtc_initial.second);
+			if(rtc_initial.second%2==0){
+				lv_label_set_text_fmt(labelClock, "%02d:%02d", rtc_initial.hour, rtc_initial.minute);
+			} else {
+				lv_label_set_text_fmt(labelClock, "%02d %02d", rtc_initial.hour, rtc_initial.minute);
+			}
+    }
+	vTaskDelay(xDelayLed);
+  }
+
+}
 
 /************************************************************************/
 /* configs                                                              */
@@ -378,6 +409,11 @@ int main(void) {
 	configure_lcd();
 	configure_touch();
 	configure_lvgl();
+
+	/* Create task to control oled */
+	if (xTaskCreate(task_rtc, "RTC", TASK_RTC_STACK_SIZE, NULL, TASK_RTC_STACK_PRIORITY, NULL) != pdPASS) {
+		printf("Failed to create rtc task\r\n");
+	}
 
 	/* Create task to control oled */
 	if (xTaskCreate(task_lcd, "LCD", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
