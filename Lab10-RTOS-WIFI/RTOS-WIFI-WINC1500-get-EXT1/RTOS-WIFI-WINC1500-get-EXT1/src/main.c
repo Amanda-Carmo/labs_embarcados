@@ -6,9 +6,10 @@
 #include "socket/include/socket.h"
 #include "util.h"
 
+
 //Configuracoes do led
 #define LED_PIO           PIOC                 // periferico que controla o LED
-#define LED_PIO_ID		  ID_PIOC              // ID do perif�rico PIOC (controla LED)
+#define LED_PIO_ID		  ID_PIOC              // ID do perif?rico PIOC (controla LED)
 #define LED_PIO_IDX       8                    // ID do LED no PIO
 #define LED_PIO_IDX_MASK  (1 << LED_PIO_IDX)   // Mascara para CONTROLARMOS o LED
 
@@ -87,12 +88,13 @@ extern void vApplicationMallocFailedHook(void){
 /************************************************************************/
 
 void init(){
-		// Ativa o PIO na qual o LED foi conectado
-		// para que possamos controlar o LED.
-		pmc_enable_periph_clk(LED_PIO_ID);
-		//Inicializa PC8 como sa�da
-		pio_set_output(LED_PIO, LED_PIO_IDX_MASK, 0, 0, 0);
-		pio_set(PIOC, LED_PIO_IDX_MASK);      // Coloca 1 no pino LED
+	// Ativa o PIO na qual o LED foi conectado
+	// para que possamos controlar o LED.
+	pmc_enable_periph_clk(LED_PIO_ID);
+	
+	//Inicializa PC8 como sa?da
+	pio_set_output(LED_PIO, LED_PIO_IDX_MASK, 0, 0, 0);
+	pio_set(PIOC, LED_PIO_IDX_MASK);
 }
 
 /************************************************************************/
@@ -299,12 +301,13 @@ static void task_process(void *pvParameters) {
         printf(STRING_LINE);
         printf(p_recvMsg->pu8Buffer);
         printf(STRING_EOL);  printf(STRING_LINE);
-        if(strstr(p_recvMsg->pu8Buffer, "\"led\": \"1\"")!=NULL){
-          pio_clear(PIOC, LED_PIO_IDX_MASK);      // Coloca 1 no pino LED
-        } else if(strstr(p_recvMsg->pu8Buffer, "\"led\": \"0\"")!=NULL){
-          printf("False\n");
-          pio_set(PIOC, LED_PIO_IDX_MASK);      // Coloca 1 no pino LED
-        }
+		if(strstr(p_recvMsg->pu8Buffer, "\"led\": \"1\"")!=NULL){
+			pio_clear(PIOC, LED_PIO_IDX_MASK);
+		}
+		if(strstr(p_recvMsg->pu8Buffer, "\"led\": \"0\"")!=NULL){
+			pio_set(PIOC, LED_PIO_IDX_MASK);	
+		}
+		
         state = DONE;
       }
       else {
@@ -333,7 +336,6 @@ static void task_wifi(void *pvParameters) {
 
   xSemaphore = xSemaphoreCreateCounting(20,0);
   xQueueMsg = xQueueCreate(10, sizeof(tstrSocketRecvMsg));
-  init();
 
   /* Initialize the BSP. */
   nm_bsp_init();
@@ -397,6 +399,7 @@ static void task_wifi(void *pvParameters) {
 
 int main(void)
 {
+	init();
   /* Initialize the board. */
   sysclk_init();
   board_init();
